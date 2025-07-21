@@ -1,81 +1,112 @@
-# Proje Analizi ve Gereksinimleri: AI Content Lab
+# Project Manifesto: AI Content Lab
 
-## 1. Proje Vizyonu ve Pazar Farklılığı
+This document defines the strategic purpose, technical approach, feature set, and development roadmap for the "AI Content Lab" project. It serves as a central reference point for everyone involved in the project.
 
-**AI Content Lab**, modern içerik üreticileri, pazarlamacılar ve ajanslar için tasarlanmış, çok-modlu (multi-modal) bir yapay zeka analiz platformudur. Geleneksel araçlar metni ve görseli ayrı ayrı analiz ederken, bizim projemiz bu iki dünyayı birleştirerek şu kritik soruyu cevaplar: **"Bu görsel ve bu metin BİRLİKTE ne anlama geliyor?"**
+## 1. Strategic Purpose of the Project (The "WHY")
 
-Projenin temel amacı; sadece analiz yapmak değil, bu analizleri eyleme dönüştürülebilir, yaratıcı ve stratejik çıktılara çevirerek kullanıcılara rekabet avantajı sağlamaktır. Platform, bir "sohbet arayüzü" olmanın ötesinde, belirli görevleri otomatikleştiren, yapısal ve güvenilir sonuçlar üreten profesyonel bir **araç (tool)** olarak konumlandırılmıştır.
+While powerful AI tools like ChatGPT exist, the purpose of developing our own API is not to reinvent artificial intelligence. Our goal is to transform a raw and powerful AI engine into a **professional service** that is manageable, reliable, and operates according to specific business rules.
 
-## 2. Platformun Ana Yetenekleri ve Özellikleri
+Our reasons for developing this project are:
 
-Platform, kullanıcının ihtiyaçlarına göre esneklik sunan üç ana modül üzerine inşa edilmiştir:
+*   **Abstracting Expertise:** To enable users to get the best results with simple commands like "summarize this text" without needing to know expert "prompt engineering." The expertise will be embedded within our back-end code.
+*   **Standardizing Output:** To guarantee that other applications can seamlessly use the data by always processing the variable and sometimes messy responses from the AI into a predictable, clean, and structured **JSON format**.
+*   **Security and Centralization:** To eliminate security risks and uncontrolled spending by managing valuable and costly API keys in a single, secure location (our back-end).
+*   **Cost and Performance Control:** To create a basis for usage analysis and cost optimization by logging all requests made to the AI services.
 
-#### Modül 1: Metin Laboratuvarı 📝
-*Kullanıcının sadece metin tabanlı analizler yaptığı alan.*
-*   **Derinlemesine Özetleme:** Metni, farklı detay seviyelerinde (tek cümle, ana fikir, detaylı paragraf) özetler.
-*   **Kavramsal Anahtar Kelime Çıkarımı:** Metindeki basit kelimeler yerine soyut konseptleri ve temaları tespit eder.
-*   **Çok Katmanlı Duygu Analizi:** Metnin pozitif/negatif tonuna ek olarak `[Heyecan, Güven, Merak]` gibi spesifik duyguları ve yoğunluklarını raporlar.
-*   **Yaratıcı Başlık ve Slogan Üretimi:** Verilen metnin özüne uygun, farklı pazarlama üsluplarında (`[Profesyonel, Esprili, Dikkat Çekici]`) başlıklar önerir.
-*   **Metin İyileştirme ve Yeniden Yazma:** Metni farklı amaçlara göre yeniden formüle eder ("Daha akıcı yap", "Daha profesyonel yap").
-*   **Hedef Kitle Tespiti:** Metnin diline bakarak hitap ettiği demografik grubu ve ilgi alanını tahmin eder.
+In summary, we are not offering the user a raw engine, but a reliable, key-in-hand tool designed with that engine to perform specific tasks perfectly.
 
-#### Modül 2: Görsel Laboratuvarı 🖼️
-*Kullanıcının sadece görsel tabanlı analizler yaptığı alan.*
-*   **Akıllı Sahne ve Nesne Tanımlama:** Görseldeki nesneleri ve sahnenin genel bağlamını açıklar.
-*   **Otomatik Açıklama ve Hikaye Üretme:** Görseli anlatan bir cümlelik açıklamaya ek olarak, o anın hissini veya hikayesini anlatan yaratıcı metinler üretir.
-*   **Viral Hashtag ve Sosyal Medya Metni Üretici:** Görseli ve güncel trendleri analiz ederek etkileşim potansiyeli yüksek `#hashtag` ve gönderi metinleri önerir.
-*   **Görsel Estetik ve Duygu Analizi:** Görselin renk paletini, kompozisyonunu ve uyandırdığı `[Huzur, Adrenalin, Lüks]` gibi duyguları analiz eder.
-*   **Görüntüden Metin Okuma (OCR):** Resim içerisindeki yazıları okuyarak metin formatına dönüştürür.
+## 2. Platform Vision and Core Capabilities
 
-#### Modül 3: Sentez Laboratuvarı ✨ (Projenin En Özgün Alanı)
-*Kullanıcının hem görsel hem de metin vererek ikisi arasındaki ilişkiyi analiz ettirdiği alan.*
-*   **Kapsamlı Görsel-Metin Uyum Analizi:** 1-100 arası bir uyum skoru verir ve bu skorun nedenlerini ("Görseldeki ürünün premium algısı, metindeki 'hesaplı' kelimesiyle çelişiyor.") detaylı bir şekilde açıklar.
-*   **Bütünsel Konsept Çıkarımı:** İki girdinin birleşiminden ortaya çıkan soyut "büyük resmi" tespit eder ("Bu içerik, 'şehir hayatından kaçış' temasını işliyor.").
-*   **Çok-Modlu İçerik Dönüşümü:** Bir görsel ve metinden yola çıkarak yepyeni formatlarda içerikler (blog yazısı fikri, e-posta bülteni anonsu, video senaryosu konsepti) üretir.
-*   **Eksik Parçayı Tamamlama:** Verilen bir metne en uygun görselin nasıl olması gerektiğini tarif eder veya yüklenen bir görsele en uygun metni sıfırdan yazar.
+The platform is built on logical modules that allow users to perform different analyses based on their needs.
 
-## 3. Stratejik Vizyon ve Gelecek Potansiyeli
+### Module 1: Text Lab 📝 **(Primary Focus)**
+The entire focus of the project in this phase will be on this module. The goal is to build a powerful and flexible text-processing engine.
 
-Bu temel yetenekler üzerine inşa edilecek gelişmiş özellikler platformu bir sonraki seviyeye taşıyacaktır:
+*   **Text Generation:**
+    *   **In-depth Summarization:** Summarizes the given text at various levels of length and detail.
+    *   **Creative Headline Generation:** Suggests catchy headlines and slogans appropriate to the content and tone of the text.
+*   **Text Analysis:**
+    *   **Conceptual Keyword Extraction:** Identifies the abstract themes and concepts underlying the text, rather than just simple words.
+    *   **Multi-layered Sentiment Analysis:** Detects not only the positive/negative tone of the text but also specific emotions like `[Excitement, Trust, Curiosity, Anxiety]`.
+*   **Text Transformation:**
+    *   **Text Improvement:** Rewrites the text to make it more fluent, professional, or suitable for a specific target audience.
 
-*   **Kullanıcı Hesapları ve Çalışma Alanları (Workspaces):** Kullanıcıların projelerini organize etmesi ve analiz geçmişlerini kaydetmesi.
-*   **Toplu Analiz (Batch Processing):** Yüzlerce metin veya görselin tek seferde analiz edilmesi.
-*   **Developer API Erişimi:** Platformun yeteneklerini bir hizmet olarak diğer yazılımlara sunma imkanı.
-*   **Prompt Kütüphanesi:** Kullanıcıların kendi uzman talimat setlerini kaydedip yeniden kullanabilmeleri.
+### Module 2: Visual Lab 🖼️ **(Secondary Priority / Future Vision)**
+These are features that can be added after the Text Lab is complete.
 
-## 4. Teknik Mimarî ve Süreç Akışı
+*   Intelligent Scene and Object Recognition
+*   Automatic Text Caption Generation from Images
+*   Text Recognition from Images (OCR)
 
-#### Geliştirme Yaklaşımı: Backend-First
-Projenin tüm iş mantığı backend'de yer alacağı için, öncelikle API altyapısı tasarlanacak, `Postman` gibi araçlarla test edilecek ve sağlam bir temel oluşturulacaktır. Bu yaklaşım, daha sonra geliştirilecek olan ön yüzün (frontend) güvenilir bir zemin üzerine inşa edilmesini sağlar.
+## 3. Technical Approach and Architecture
 
-#### Teknoloji Yığını (Tech Stack)
+### Technology Stack
 *   **Backend:** Node.js
-*   **Framework:** Express.js
-*   **AI Servisi:** OpenAI API
-    *   **Metin Modelleri:** GPT-4 / GPT-3.5-Turbo
-    *   **Görsel Analiz Modeli:** GPT-4 Vision (GPT-4V)
-*   **Temel Kütüphaneler:**
-    *   `openai`: Resmi OpenAI Node.js istemcisi.
-    *   `multer`: Görsel dosyalarını sunucuya yüklemek (upload) için.
-    *   `cors`: Çapraz kaynak isteklerine izin vermek için.
-    *   `dotenv`: API anahtarı gibi gizli bilgileri güvenli bir şekilde saklamak için.
+*   **Web Framework:** Express.js
+*   **AI Service:** OpenAI API (GPT-4 / GPT-3.5-Turbo)
+*   **Required Libraries:** `openai`, `express`, `dotenv`, `cors`
 
-#### Mimarî Model ve Süreç
-Platformun beyni, tek ve akıllı bir API endpoint'i (`POST /api/analyze`) üzerinden çalışacaktır. Bu mimari, projenin esnekliğini ve yönetilebilirliğini sağlar:
-1.  **İstek (Request):** Kullanıcı arayüzden bir veya daha fazla veri (metin, görsel) ve yapılacak işin tanımını (`task: "summarize_text"`) içeren bir istek gönderir.
-2.  **Yönlendirme (Routing):** Backend'deki `analyze` fonksiyonu, gelen `task` parametresine bakar.
-3.  **Tercüme (Translation):** Bir `switch` veya `map` objesi, bu basit `task` tanımını, o işe özel olarak önceden hazırlanmış, detaylı ve uzman bir "Prompt"a (talimata) çevirir. **Bu, platformun bir Chatbot'tan temel farkıdır; kullanıcıdan uzman prompt bilgisi beklemez, bu uzmanlığı kendi içinde barındırır.**
-4.  **Yürütme (Execution):** Oluşturulan uzman prompt ve kullanıcının verisi, OpenAI API'sine gönderilir.
-5.  **Yanıt (Response):** OpenAI'den gelen sonuç, temiz ve yapılandırılmış bir JSON formatında paketlenerek kullanıcıya geri döndürülür.
+### API Architecture: Task-Oriented and Grouped Structure
+A multi-endpoint REST API structure that logically groups tasks will be adopted to increase the project's manageability and readability. This structure prevents complexity as the project grows and simplifies adding new features. Actions (like `analysis`, `generation`, `transformation`) will be presented in self-consistent groups.
 
-## 5. Proje Gereksinimleri
+### Key Concept: System Prompt
+A "System Prompt" is a preliminary instruction given to the AI model before assigning it a task, teaching it who it is and how it should behave.
 
-#### Fonksiyonel Gereksinimler
-*   Sistem, metin girdisini alıp en azından özetleme ve anahtar kelime çıkarma işlemlerini yapabilmelidir.
-*   Sistem, görsel girdisini alıp en azından görseli anlatan bir metin (caption) üretebilmelidir.
-*   Sistem, dosya yükleme (`image/jpeg`, `image/png`) işlemlerini desteklemelidir.
-*   Tüm API istekleri tek bir endpoint üzerinden, `task` parametresi ile yönetilmelidir.
+*   **Example:** For a text summarization task, we send the AI a system prompt like, "You are a professional editor who analyzes long texts and extracts the most important points. Your response should only contain the summary text, with no additional explanations."
+*   **Benefit:** This ensures the AI produces consistent, reliable, and properly formatted outputs. This approach forms the foundation of our project's professionalism.
 
-#### Teknik Gereksinimler
-*   Geçerli bir OpenAI API anahtarına erişim.
-*   Node.js ve NPM'in kurulu olduğu bir geliştirme ortamı.
+## 4. Development Process and Phased Roadmap
+
+The project will be developed using a **"back-end-first"** approach. All API logic and features will be tested and validated with tools like Postman before being connected to a user interface.
+
+### Phase 1: Foundation Setup and Infrastructure
+This phase lays the groundwork for the project and creates the first working version.
+
+*   [ ] Set up a Git repository and a Node.js/Express project skeleton.
+*   [ ] Create the folder structure according to the architecture (`src`, `api`, `config`, etc.).
+*   [ ] Configure the API key and environment variables using a `.env` file.
+*   [ ] Create the basic structure for the first endpoint (text summarization task).
+*   [ ] Write the basic service function to communicate with the OpenAI service.
+*   [ ] Make the first successful text summarization request using Postman.
+
+### Phase 2: First Features (The Text-to-Text Core)
+This phase involves implementing the first usable feature set of the project.
+
+*   [ ] **Feature: Text Summarization**
+    *   Add parameter support (`length`) to get short, medium, and long summaries.
+*   [ ] **Feature: Keyword Extraction**
+    *   Complete the relevant endpoint and service logic.
+*   [ ] **Feature: Sentiment Analysis**
+    *   Complete the relevant endpoint and service logic.
+
+### Phase 3: Expanding Capabilities and Refinement
+Adding new capabilities on top of the core features and strengthening the existing system.
+
+*   [ ] **Feature: Creative Headline Generation**
+*   [ ] **Feature: Text Rewriting**
+*   [ ] Implement a centralized error-handling mechanism.
+*   [ ] Add a basic validation layer for incoming requests.
+
+## 5. Project Management and Tracking
+Project tasks and progress will be transparently tracked using **Trello**.
+
+*   **Board:** `AI API Project`
+*   **Lists (Columns):** `Backlog` (All Ideas), `To-Do`, `In Progress`, `Done`.
+*   **Cards:** Each `[ ]` item in the roadmap will be created as a card in Trello with detailed descriptions and sub-tasks (checklists). This will both structure the development process and allow mentors to easily track project progress.
+
+## 6. Technology Stack and Core Tools
+
+### Backend Technologies
+*   **Platform:** Node.js
+*   **Web Framework:** Express.js
+*   **Database:** Not Required for Initial Stage (Stateless)
+
+### AI Services
+*   **Primary Service Provider:** OpenAI
+*   **Models to be Used:** GPT-4 / GPT-3.5-Turbo
+
+### Development and Management Tools
+*   **Package Manager:** NPM
+*   **API Testing Tool:** Postman
+*   **Version Control System:** Git
+*   **Project Management Platform:** Trello
