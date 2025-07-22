@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "This document defines the strategic purpose, technical approach, feature set, and development roadmap for the \"AI Content Lab\" project. It serves as a central reference point for everyone involved in the project.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+     "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "openai": "^5.10.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
