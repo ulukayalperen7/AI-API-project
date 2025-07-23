@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// ----------------------------------
+// DATA MODELS
+// ----------------------------------
+
+// Represents the customers/clients.
+model Tenant {
+  id           Int      @id @default(autoincrement())
+  company_name String
+  api_key      String   @unique
+  status       String   @default("active") // e.g., active, inactive, suspended
+  created_at   DateTime @default(now())
+
+  // --- Relationships ---
+  // A Tenant can have many Users and many ApiLogs.
+  users    User[]
+  api_logs ApiLog[]
+}
+
+// Represents the individual users belonging to a Tenant.
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password_hash String
+  full_name     String? // The '?' makes this field optional.
+  role          String   @default("user") // e.g., admin, user
+  created_at    DateTime @default(now())
+
+  // --- Relationships ---
+  // A User must belong to one Tenant.
+  tenant_id Int
+  tenant    Tenant @relation(fields: [tenant_id], references: [id])
+
+  // A User can make many ApiLog entries.
+  api_logs ApiLog[]
+}
+
+// Represents the AI task templates (e.g., "Summarize Text").
+model Template {
+  id             Int      @id @default(autoincrement())
+  name           String   @unique
+  description    String?
+  system_prompt  String   // The base prompt, e.g., "Summarize the text in {{language}}."
+  default_model  String   // e.g., "openai-gpt-3.5-turbo"
+  allowed_models Json     // A list of permitted models, e.g., ["model1", "model2"]
+  placeholders   Json?    // A list of expected placeholders, e.g., ["language", "tone"]
+
+  // --- Relationships ---
+  // A Template can be used in many ApiLogs.
+  api_logs ApiLog[]
+}
+
+// Records every single API call made to the system.
+model ApiLog {
+  id                  Int       @id @default(autoincrement())
+  status              String    // e.g., success, failed
+  request_duration_ms Int?
+  input_tokens        Int?
+  output_tokens       Int?
+  total_cost_usd      Float?
+  error_message       String?
+  created_at          DateTime  @default(now())
+
+  // --- Relationships ---
+  // An ApiLog must belong to one Tenant, one User, and one Template.
+  tenant_id   Int
+  tenant      Tenant   @relation(fields: [tenant_id], references: [id])
+  user_id     Int
+  user        User     @relation(fields: [user_id], references: [id])
+  template_id Int
+  template    Template @relation(fields: [template_id], references: [id])
+}
