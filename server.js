@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 
 import cors from 'cors';
+import mainRoutes from './src/api/main.routes.js';
 
 dotenv.config();// Load environment variables
 
@@ -47,6 +48,10 @@ app.get('/', (req, res) => {
      the Content-Type header to application/json. */
     res.send('AI Content Lab is working')
 });
+
+//   -- API ROUTES --
+app.use('/api/v1', mainRoutes);
+
 
 //    START THE SERVER
 app.listen(PORT, () => { // this method starts the express server; the callback runs only once when the server starts.
