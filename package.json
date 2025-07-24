@@ -14,6 +14,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "bugs": {
     "url": "https://github.com/ulukayalperen7/AI-API-project/issues"
   },

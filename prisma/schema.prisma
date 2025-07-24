@@ -1,3 +1,7 @@
+// This file is the fundamental structure of our project. It contains the "blueprint" or "blueprint" of our database.
+// It tells us how our tables will look, what columns they will have, and how we will split them into extended formats.
+// When we run 'npx prisma migrate dev', Prisma reads this and creates or updates the tables in the actual PostgreSQL database based on the plan.
+
 generator client {
   provider = "prisma-client-js"
 }

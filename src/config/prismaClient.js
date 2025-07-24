@@ -3,6 +3,8 @@
  * prisma client is like the bridge that the app uses to talk to db*/
 import { PrismaClient } from '@prisma/client';
 
+// connection pooling
+
 /** 
  * Client Instance :
  * We created a single and shared Instance of the PrismaClient.

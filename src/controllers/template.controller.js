@@ -1,4 +1,4 @@
-
+import * as TemplatService from '../services/template.service.js';
 /**
  * This function executes a specific AI template based on the provided ID
  * It manages the entire process:
@@ -27,19 +27,25 @@ export const executeTemplate = async (req, res) => {
          */
         const requestBody = req.body;
 
-        //  for now : to confirm it works
-        console.log(`Executing template with id : ${id}`);
-        console.log(`Request Body:`, requestBody);
+        // send id and requestBody to service layer 
+        const result = await TemplatService.execute(id, requestBody);
 
         // send a success response back to the client
         res.status(200).json({
-            messsage: `Successfully received request for template ID: ${id}`,
-            data_received: requestBody,
+            message: `Template executed successfully`,
+            data: result,
         });
 
     } catch (error) {
-        // if an error occurs, send a server error response
-        console.error('Error executing template:', error);
+
+        console.error('CONTROLLER ERROR: ', error.message);
+
+        // more specific error for "Not Found"
+        if (error.message.includes('not found')) {
+            return res.status(404).json({ message: error.message });
+        }
+
+
         res.status(500).json({
             message: 'An internal server error occurred.',
             error: error.message,
