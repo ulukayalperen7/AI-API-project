@@ -30,9 +30,10 @@ export const executeTemplate = async (req, res) => {
         // send id and requestBody to service layer 
         const result = await TemplatService.execute(id, requestBody);
 
+        console.log('CONTROLLER RECEIVED:', result); 
         // send a success response back to the client
         res.status(200).json({
-            message: `Template executed successfully`,
+            message: 'Template executed successfully',
             data: result,
         });
 

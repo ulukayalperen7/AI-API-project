@@ -23,17 +23,18 @@ export const generateGeminiContent = async (prompt) => {
     /* 
     It takes a text prompt, sends it to the Gemini API using model.generateContent(prompt), 
     waits for the result, and returns the generated text. */
+ 
     try {
         console.log("GEMINI SERVICE: sending promts...");
 
         // we use the specific model that we declared above to generate content based on the prompt
         const result = await model.generateContent(prompt);
-        const response = result.response;
+        const response = await result.response;
 
-        // get the text from response object
-        const text = response.text();
-
+        const text = await response.text();
+        console.log('GEMINI SERVICE: Received valid response.');
         return text;
+
     } catch (error) {
         console.log('Error in Gemini Service: ', error);
         throw new Error('Failed to generate content from Gemini API.');

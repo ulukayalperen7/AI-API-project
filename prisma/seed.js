@@ -3,7 +3,7 @@
  * It establishes and closes its db connection.
  * It is a one-time, standalone program.
  *  
- */ 
+ */
 
 // PrismaClient allows us to talk to the db
 import { PrismaClient } from "@prisma/client";
@@ -27,8 +27,8 @@ async function main() {
             name: 'Standard Text Summarization',
             description: 'Summarizes a given block of text into a concise paragraph.',
             system_prompt: 'You are a professional editor. \n Analyze the following text and provide a concise summary. The summary should capture the main points and be easy to understand. Do not add any extra commentary. The text to summarize is: {{text_to_process}}',
-            default_model: 'openai-gpt-3.5-turbo',
-            allowed_models: ['openai-gpt-3.5-turbo', 'openai-gpt-4'], // stored as a JSON array
+            default_model: 'gemini-1.5-flash',
+            allowed_models: ['gemini-1.5-pro-latest', 'gemini-1.0-pro', 'gemini-pro', 'gemini-1.5-flash'], // stored as a JSON array
             placeholders: ['text_to_process'], // JSON array
         },
     });
