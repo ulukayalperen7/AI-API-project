@@ -1,28 +1,28 @@
 import dotenv from 'dotenv';
-
-/* It imports the express library into the project using Node.js's CommonJS module system.
- The require function finds the express package in the node_modules directory and assigns
- the main object/function that the package exports to a constant named express. */
-import express from 'express';
-
-import cors from 'cors';
-import mainRoutes from './src/api/main.routes.js';
-
 dotenv.config();// Load environment variables
 
-/* The express constant is actually a function. 
-When we call this function with (), it creates a new Express application instance. 
+/* It imports the express library and its types into the project. */
+import express, { Express, Request, Response } from 'express';
+
+import cors from 'cors';
+
+// The path to main.routes.js is corrected.
+// Since server.ts is in 'src', the path starts from './api/...'
+import mainRoutes from './src/api/main.routes';
+
+/* The express constant is actually a function.
+When we call this function with (), it creates a new Express application instance.
 All our server logic, routing, and middleware will be configured through this app object. */
-const app = express();  // initalize the express app
+const app: Express = express();  // The 'app' variable is typed as Express.
 
 
 // --- MIDDLEWARES ---
 // These are functions that run on every request before it reaches our route handlers
 
 // Enable Cross-Origin Resource Sharing (CORS)
-/* cors is like a security guard on our API server that says, 
-"It's okay, I trust requests coming from our front-end application." 
-We need to enable it now so we don't have problems later when a user 
+/* cors is like a security guard on our API server that says,
+"It's okay, I trust requests coming from our front-end application."
+We need to enable it now so we don't have problems later when a user
 interface tries to connect to our API. */
 app.use(cors());
 
@@ -34,12 +34,14 @@ app.use(express.json());
 
 
 // SERVER CONFIG
-const PORT = process.env.PORT || 3000; // The port is read from the .env file, if not found, default:3000
+// The port is explicitly cast to a number for type safety.
+const PORT: number = Number(process.env.PORT) || 3000;
 
-/* req (Request): Object containing all information about the incoming 
+/* req (Request): Object containing all information about the incoming
 request (request headers, parameters, sender IP, etc.). */
 /* res (Response): The object we will use to send a response back to the client that made the request. */
-app.get('/', (req, res) => {
+// The req and res parameters are now correctly typed.
+app.get('/', (req: Request, res: Response) => {
 
     /* It calls the send() method of the response object.
      This method sends a response to the client and completes the request.
