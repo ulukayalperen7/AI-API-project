@@ -1,10 +1,8 @@
 // The 'Template' type is imported from the auto-generated Prisma client.
 // This allows TypeScript to understand the exact shape of a template object from the database.
 import { Template } from '@prisma/client';
-
-import { generateGeminiContent } from './gemini.service';
 import prisma from '../config/prismaClient';
-
+import { generateContentByModel } from './ai.manager';
 
 // This interface defines the expected structure of the object returned by the 'execute' function.
 // It ensures that any function calling 'execute' knows to expect these specific properties.
@@ -93,14 +91,18 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
     // create the final prompt by replacing placeholders
     // The 'template.system_prompt' and 'requestBody.placeholders' properties are accessed safely.
     const finalPrompt = preparePrompt(template.system_prompt, requestBody.placeholders);
+
     console.log('SERVICE: Final prompt prepared.');
 
-    console.log('SERVICE: Sending prompt to Gemini...');
+    // This service(template.service.ts) no longer knows or cares about "Gemini".
+    const modelToUse = template.default_model;
 
-    // call the AI service with the final prompt
-    // the crucial line where we pass control to our Gemini service and wait for the AI's response
-    const responseOfAI = await generateGeminiContent(finalPrompt);
-    console.log('SERVICE: Received response from Gemini.');
+    console.log(`SERVICE: Handing off to AI Manager with model: ${modelToUse}`);
+
+
+    const responseOfAI = await generateContentByModel(modelToUse, finalPrompt)
+    console.log('SERVICE: Received response back from AI Manager.');
+
     // we will later log the request tp apilogs table
 
     console.log('SERVICE IS ABOUT TO RETURN: ', {
@@ -116,3 +118,9 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
         template_used: template.name,
     };
 };
+
+/* This service doesnt know the existing of Gemini or openAI or etc.
+It only knows the ai.manager as responsible of these ai services.
+
+loosely coupled and dependency inversion principle we template_used
+high cohesion: each module does its job and only does one job*/
