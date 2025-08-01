@@ -2,6 +2,9 @@ import { Router } from "express";
 
 import { executeTemplate } from "../controllers/template.controller";
 
+// our validation middleware (like gatekeeper)
+import { validateExeceuteTemplate } from "./template.validators";
+
 const router = Router(); // we create a new router instance 
 
 
@@ -16,7 +19,9 @@ const router = Router(); // we create a new router instance
  * @desc Executes a specific AI template
  * @access Public(for now)
  */
-router.post('/templates/:id/execute', executeTemplate);
+// Requests will FIRST go to validateExecuteTemplate.
+// If it calls next(), THEN the request will be passed to executeTemplate.
+router.post('/templates/:id/execute', validateExeceuteTemplate, executeTemplate);
 
 
 /**
