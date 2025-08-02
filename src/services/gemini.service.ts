@@ -56,7 +56,14 @@ class GeminiService implements AIProvider {
 
         } catch (error) {
             console.log('Error in Gemini Service: ', error);
-            throw new Error('Failed to generate content from Gemini API.');
+            // Create a new, more informative error message.
+            const newError = new Error('Failed to generate content from the external AI provider (Gemini).');
+
+            // We check if the original error from Google has a status code we can use.
+            // If Google sends a specific error code (like 503), we pass it along.
+            // Otherwise, we default to 502 Bad Gateway: the server received an invalid response from an upstream server (Google)
+            (newError as any).statusCode = (error as any)?.status || 502;
+            throw newError;
         }
     }
 }
