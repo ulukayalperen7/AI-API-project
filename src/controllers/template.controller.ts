@@ -1,5 +1,5 @@
 // Imports the necessary types from the Express framework for type safety.
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // The '.js' extension is removed as TypeScript handles module resolution.
 import * as TemplateService from '../services/template.service';
@@ -16,7 +16,8 @@ import * as TemplateService from '../services/template.service';
  */
 // This function is defined as asynchronous to use the 'await' keyword.
 // The 'req' and 'res' parameters are typed with 'Request' and 'Response' for autocompletion and error checking.
-export const executeTemplate = async (req: Request, res: Response) => {
+// next : allows us to pass any caught errors to the next middleware in the chain(whic is globalErrorHandler)
+export const executeTemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         /**
          * This is how we access the dynamic :id
@@ -46,7 +47,8 @@ export const executeTemplate = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        // This block catches any errors that occur in the 'try' block.
+        next(error);
+        /* // This block catches any errors that occur in the 'try' block.
         // It checks if the caught 'error' is an instance of the standard Error class to safely access its properties.
         if (error instanceof Error) {
             console.error('CONTROLLER ERROR: ', error.message);
@@ -67,6 +69,6 @@ export const executeTemplate = async (req: Request, res: Response) => {
             res.status(500).json({
                 message: 'An unknown internal server error occurred.',
             });
-        }
+        } */
     }
 };

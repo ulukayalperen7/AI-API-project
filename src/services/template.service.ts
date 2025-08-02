@@ -42,15 +42,26 @@ const preparePrompt = (text: string, placeholders: Record<string, string>): stri
 // The function's return type is a 'Promise' that resolves to either a 'Template' object or 'null'.
 const findTemplateById = async (templateId: string): Promise<Template | null> => {
 
-    /**
-     * prisma gets the ID as a number
-     * 10 is the base of the number in string
-     */
+    // checks if the string contains ONLY digits 
+    // from start (^) to end ($).
+    const isNumericRegex = /^\d+$/;
+
+    // We first test if the entire string is numeric.
+    if (!isNumericRegex.test(templateId)) {
+        const error = new Error('Invalid template ID format. ID must consist of only numbers.');
+        (error as any).statusCode = 400; // bad request
+        throw error;
+    }
+
+    // Only if the string is purely numeric, we parse it.
     const idNumber = parseInt(templateId, 10);
 
+    // this is extra control layer
     // This check validates that the conversion to a number was successful.
     if (isNaN(idNumber)) {
-        throw new Error('Invalid template ID format. ID must be a number.');
+        const error = new Error('Failed to parse the numeric ID.');
+        (error as any).statusCode = 500; // This should ideally never happen
+        throw error;
     }
 
     console.log(`SERVICE: Searching for template with ID: ${idNumber}`);
@@ -84,7 +95,12 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
     // if the template doesnt exist
     // This 'if' check also acts as a type guard. After this, TypeScript knows 'template' cannot be null.
     if (!template) {
-        throw new Error(`Template with ID: ${templateId} not found.`);
+        // 1. Create a standard Error object
+        const error = new Error(`Template with ID: ${templateId} not found.`);
+
+        // not found
+        (error as any).statusCode = 404;
+        throw error;
     }
     console.log('SERVICE: Template found: ', template.name);
 

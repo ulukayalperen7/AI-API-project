@@ -10,6 +10,8 @@ import cors from 'cors';
 // Since server.ts is in 'src', the path starts from './api/...'
 import mainRoutes from './src/api/main.routes';
 
+import { globalErrorHandler } from './src/middlewares/errorHandler';
+
 /* The express constant is actually a function.
 When we call this function with (), it creates a new Express application instance.
 All our server logic, routing, and middleware will be configured through this app object. */
@@ -32,6 +34,8 @@ we will send it in JSON format. This middleware is a built-in "translator" in Ex
  that takes that incoming JSON data and makes it easily accessible in our code */
 app.use(express.json());
 
+// Express automatically understands it is an error handler when it faces a middleware with 4 parameters
+app.use(globalErrorHandler);
 
 // SERVER CONFIG
 // The port is explicitly cast to a number for type safety.
