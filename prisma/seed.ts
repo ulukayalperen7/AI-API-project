@@ -28,11 +28,11 @@ async function main(): Promise<void> {
         data: {
             name: 'Standard Text Summarization',
             description: 'Summarizes a given block of text into a concise paragraph.',
-            system_prompt: 'You are a professional editor. \n Analyze the following text and provide a concise summary. The summary should capture the main points and be easy to understand. Do not add any extra commentary. The text to summarize is: {{text_to_process}}',
+            system_prompt: 'You are a professional editor. \n Analyze the following text and provide a concise summary in {{language}}. The summary should capture the main points and be easy to understand. Do not add any extra commentary. The text to summarize is: {{text_to_process}}',
             default_model: 'gemini-1.5-flash',
             // Prisma expects Json fields to be valid JSON, arrays are valid.
             allowed_models: ['gemini-1.5-pro-latest', 'gemini-1.0-pro', 'gemini-pro', 'gemini-1.5-flash'],
-            placeholders: ['text_to_process'],
+            placeholders: ['text_to_process', 'language'],
         },
     });
 
