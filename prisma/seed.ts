@@ -36,7 +36,20 @@ async function main(): Promise<void> {
         },
     });
 
+    // keywordExtraction feature: just add template, we dont change anything , thats it 
+    const keywordExtractionTemplate = await prisma.template.create({
+        data: {
+            name: 'Keyword Extractor',
+            description: 'Extracts key topics and terms from a block of text.',
+            system_prompt: "You are a text analysis expert. Analyze the following text and extract the most relevant and important keywords. List them as a comma-separated list. For example: 'AI, machine learning, data science'. The text to analyze is: {{text_to_process}}",
+            default_model: 'gemini-1.5-flash',
+            allowed_models: ['gemini-1.5-pro-latest', 'gemini-1.0-pro', 'gemini-pro', 'gemini-1.5-flash'],
+            placeholders: ['text_to_process'],
+        },
+    });
+
     console.log(`Successfully created template with ID: ${summarizationTemplate.id}`);
+    console.log(`Successfully created template with ID: ${keywordExtractionTemplate.id}`);
     console.log('Seeding process finished!');
 }
 
