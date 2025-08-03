@@ -48,6 +48,7 @@ async function main(): Promise<void> {
         },
     });
 
+    // Translation template
     const translationTemplate = await prisma.template.create({
         data: {
             name: 'Text Translator',
@@ -60,9 +61,22 @@ async function main(): Promise<void> {
         },
     });
 
+    // email template 
+    const emailAssistantTemplate = await prisma.template.create({
+        data: {
+            name: 'Email Reply Assistant',
+            description: 'Drafts a professional email reply based on an original email and a desired intent.',
+            system_prompt: "You are a highly efficient and professional business email assistant. Your task is to draft a reply to the email provided below. The reply must be based on the user's stated intent. Write the email in a natural and polite tone, appropriate for a business context, and make sure to draft it in {{language}}. Do not add any extra commentary or signatures, just provide the body of the reply email. --- ORIGINAL EMAIL TO REPLY TO: --- {{original_email}} --- USER'S INTENT FOR THE REPLY: --- {{response_intent}}",
+            default_model: 'gemini-1.5-flash',
+            allowed_models: ['gemini-1.5-flash'],
+            placeholders: ['original_email', 'response_intent', 'language'],
+        },
+    });
+
     console.log(`Successfully created Summarization template with ID: ${summarizationTemplate.id}`);
     console.log(`Successfully created Keyword Extraction template with ID: ${keywordExtractionTemplate.id}`);
     console.log(`Successfully created Translation template with ID: ${translationTemplate.id}`);
+    console.log(`Successfully created Email assistant template with ID: ${emailAssistantTemplate.id}`);
     console.log('Seeding process finished!');
 }
 
