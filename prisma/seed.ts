@@ -48,8 +48,21 @@ async function main(): Promise<void> {
         },
     });
 
-    console.log(`Successfully created template with ID: ${summarizationTemplate.id}`);
-    console.log(`Successfully created template with ID: ${keywordExtractionTemplate.id}`);
+    const translationTemplate = await prisma.template.create({
+        data: {
+            name: 'Text Translator',
+            description: 'Translates text from a source language to a target language.',
+            system_prompt: "You are an expert multilingual translator. Your task is to translate the following text accurately from {{source_language}} to {{target_language}}. Provide only the translated text, without any additional comments, explanations, or quotation marks. The text to translate is: {{text_to_process}}",
+            default_model: 'gemini-1.5-flash',
+            allowed_models: ['gemini-1.5-flash'],
+            // this tempalte needs these fields to accurately translate the text
+            placeholders: ['text_to_process', 'source_language', 'target_language'],
+        },
+    });
+
+    console.log(`Successfully created Summarization template with ID: ${summarizationTemplate.id}`);
+    console.log(`Successfully created Keyword Extraction template with ID: ${keywordExtractionTemplate.id}`);
+    console.log(`Successfully created Translation template with ID: ${translationTemplate.id}`);
     console.log('Seeding process finished!');
 }
 
