@@ -24,6 +24,7 @@ async function main(): Promise<void> {
      * Each key here (name, description, etc) corresponds to a column we defined for
      * the 'Template' model in our schema.prisma file.
      */
+    // id 1
     const summarizationTemplate = await prisma.template.create({
         data: {
             name: 'Standard Text Summarization',
@@ -37,6 +38,7 @@ async function main(): Promise<void> {
     });
 
     // keywordExtraction feature: just add template, we dont change anything , thats it 
+    // id 2
     const keywordExtractionTemplate = await prisma.template.create({
         data: {
             name: 'Keyword Extractor',
@@ -49,6 +51,7 @@ async function main(): Promise<void> {
     });
 
     // Translation template
+    // id 3
     const translationTemplate = await prisma.template.create({
         data: {
             name: 'Text Translator',
@@ -62,6 +65,7 @@ async function main(): Promise<void> {
     });
 
     // email template 
+    // id 4
     const emailAssistantTemplate = await prisma.template.create({
         data: {
             name: 'Email Reply Assistant',
@@ -73,10 +77,23 @@ async function main(): Promise<void> {
         },
     });
 
+    // id 5
+    const textRefinementTemplate = await prisma.template.create({
+        data: {
+            name: 'Text Refiner',
+            description: 'Rewrites a given text to a specified style or tone (e.g., more professional, more casual).',
+            system_prompt: "You are a skilled editor and writing assistant. Your task is to rewrite the following text according to the specified target style. Ensure the core message of the text remains the same, but adapt the tone, clarity, and phrasing to match the requested style. Provide only the rewritten text. --- ORIGINAL TEXT: --- {{text_to_process}} --- TARGET STYLE: --- {{target_style}}",
+            default_model: 'gemini-1.5-flash',
+            allowed_models: ['gemini-1.5-flash'],
+            placeholders: ['text_to_process', 'target_style'],
+        },
+    });
+
     console.log(`Successfully created Summarization template with ID: ${summarizationTemplate.id}`);
     console.log(`Successfully created Keyword Extraction template with ID: ${keywordExtractionTemplate.id}`);
     console.log(`Successfully created Translation template with ID: ${translationTemplate.id}`);
     console.log(`Successfully created Email assistant template with ID: ${emailAssistantTemplate.id}`);
+    console.log(`Successfully created Text refinement template with ID: ${textRefinementTemplate.id}`);
     console.log('Seeding process finished!');
 }
 
