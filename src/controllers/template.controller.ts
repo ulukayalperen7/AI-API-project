@@ -47,27 +47,5 @@ export const executeTemplate = async (req: Request, res: Response, next: NextFun
 
     } catch (error) {
         next(error); // to globalErrorHandler 
-        /* // This block catches any errors that occur in the 'try' block.
-        // It checks if the caught 'error' is an instance of the standard Error class to safely access its properties.
-        if (error instanceof Error) {
-            console.error('CONTROLLER ERROR: ', error.message);
-
-            // more specific error for "Not Found"
-            if (error.message.includes('not found')) {
-                // This returns a 404 Not Found error if the template doesn't exist.
-                return res.status(404).json({ message: error.message });
-            }
-
-            // This returns a generic 500 Internal Server Error for all other errors.
-            res.status(500).json({
-                message: 'An internal server error occurred.',
-                error: error.message,
-            });
-        } else {
-            // This handles cases where the thrown object is not a standard error.
-            res.status(500).json({
-                message: 'An unknown internal server error occurred.',
-            });
-        } */
     }
 };

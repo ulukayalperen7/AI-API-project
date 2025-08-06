@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { AIProvider } from "./ai.manager";
+import AppError from "../utils/AppError";
 
 /**
  * self contained Gemini service class
@@ -19,7 +20,7 @@ class GeminiService implements AIProvider {
 
         // check if the apiKey exists
         if (!apiKey) {
-            throw new Error("GEMINI_API_KEY is not defined in the environment variables.");
+            throw new AppError("GEMINI_API_KEY is not defined in the environment variables. The server is not configured correctly.", 500);
         }
 
         // creating an instance of the GoogleGenerativeAI class, we give it the apiKey, connection object
@@ -55,16 +56,15 @@ class GeminiService implements AIProvider {
             console.log('GEMINI SERVICE: received valid response.')
             return text;
 
+            //In the catch (error) statement in a try...catch block, the type of the error is unknown by default, according to TypeScript's latest, strictest rules.
         } catch (error) {
             console.log('Error in Gemini Service: ', error);
-            // Create a new, more informative error message.
-            const newError = new Error('Failed to generate content from the external AI provider (Gemini).');
 
             // We check if the original error from Google has a status code we can use.
             // If Google sends a specific error code (like 503), we pass it along.
             // Otherwise, we default to 502 Bad Gateway: the server received an invalid response from an upstream server (Google)
-            (newError as any).statusCode = (error as any)?.status || 502;
-            throw newError;
+            const statusCode = (error as any)?.status || 502;
+            throw new AppError('Failed to generate content from the external AI provider (Gemini).', statusCode);
         }
     }
 }

@@ -3,7 +3,7 @@ import { Router } from "express";
 import { executeTemplate } from "../controllers/template.controller";
 
 // our validation middleware (like gatekeeper)
-import { validateExeceuteTemplate } from "./template.validators";
+import { validateExecuteTemplate } from "./template.validators";
 
 const router = Router(); // we create a new router instance 
 
@@ -21,7 +21,7 @@ const router = Router(); // we create a new router instance
  */
 // Requests will FIRST go to validateExecuteTemplate.
 // If it calls next(), THEN the request will be passed to executeTemplate.
-router.post('/templates/:id/execute', validateExeceuteTemplate, executeTemplate);
+router.post('/templates/:id/execute', validateExecuteTemplate, executeTemplate);
 
 
 /**

@@ -23,21 +23,26 @@ export const validateExecuteTemplate = async (req: Request, res: Response, next:
       defined in the DTO class.
       "validate" returns an array of errors, if the array is empty
       validation is OK */
-    const errors = await validate(requestObject);
+    const errors = await validate(requestObject, {
+        whitelist: true,              // Automatically remove any properties that are not in our DTO.
+        forbidNonWhitelisted: true,   // If properties that are not in our DTO are found, REJECT the request.
+    });
 
     // if any error occurs
     if (errors.length > 0) {
-        console.log("VALIDATION ERROR: ", errors);
+        console.log("VALIDATION ERROR: ", JSON.stringify(errors, null, 2));
         return res.status(400).json({
             message: "Invalid request body",
             // We map the error array to a simpler format.
-            errors: errors.map(err => ({
-                property: err.property,
-                constraints: err.constraints
-            })),
+            errors: errors,
         });
     }
+
+    // Because of 'whitelist', req.body might have been cleaned.
+    req.body = requestObject;
+
     console.log("VALIDATION: Request body is valid");
+    
     // 4. If validation passes, call next() to move to the controller.
     next();
 };

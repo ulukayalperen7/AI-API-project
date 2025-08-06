@@ -3,6 +3,7 @@
 import { Template } from '@prisma/client';
 import prisma from '../config/prismaClient';
 import { generateContentByModel } from './ai.manager';
+import AppError from '../utils/AppError';
 
 // This interface defines the expected structure of the object returned by the 'execute' function.
 // It ensures that any function calling 'execute' knows to expect these specific properties.
@@ -48,9 +49,7 @@ const findTemplateById = async (templateId: string): Promise<Template | null> =>
 
     // We first test if the entire string is numeric.
     if (!isNumericRegex.test(templateId)) {
-        const error = new Error('Invalid template ID format. ID must consist of only numbers.');
-        (error as any).statusCode = 400; // bad request
-        throw error;
+        throw new AppError('Invalid template ID format. ID must consist of only numbers.', 400);
     }
 
     // Only if the string is purely numeric, we parse it.
@@ -59,10 +58,8 @@ const findTemplateById = async (templateId: string): Promise<Template | null> =>
     // this is extra control layer
     // This check validates that the conversion to a number was successful.
     if (isNaN(idNumber)) {
-        const error = new Error('Failed to parse the numeric ID.');
-        (error as any).statusCode = 500; // This should ideally never happen
-        throw error;
-    }//????????
+      throw new AppError('Failed to parse the numeric ID.', 500); // This should ideally never happen
+    }
 
     console.log(`SERVICE: Searching for template with ID: ${idNumber}`);
 
@@ -95,12 +92,7 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
     // if the template doesnt exist
     // This 'if' check also acts as a type guard. After this, TypeScript knows 'template' cannot be null.
     if (!template) {
-        // 1. Create a standard Error object
-        const error = new Error(`Template with ID: ${templateId} not found.`);
-
-        // not found
-        (error as any).statusCode = 404;
-        throw error;
+         throw new AppError(`Template with ID: ${templateId} not found.`, 404);
     }
     console.log('SERVICE: Template found: ', template.name);
 

@@ -1,3 +1,4 @@
+import AppError from "../utils/AppError";
 import geminiService from "./gemini.service";
 /**
  * This interface defines the contract that all AI provider services must follow.
@@ -30,7 +31,7 @@ export const generateContentByModel = async (modelName: string, prompt: string):
     const provider = providers[modelName];
 
     if (!provider) {
-        throw new Error(`Model '${modelName}' is not supported or not registered in ai.manager.`);
+       throw new AppError(`Model '${modelName}' is not supported or not registered.`, 400);
     }
 
     console.log(`AI MANAGER: Routing prompt to provider for model: ${modelName}`);
