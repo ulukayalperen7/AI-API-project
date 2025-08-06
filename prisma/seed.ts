@@ -77,7 +77,7 @@ async function main(): Promise<void> {
             name: 'Text Translator',
             description: 'Translates text from a source language to a target language.',
             system_prompt: "You are an expert multilingual translator. Your task is to translate the following text accurately from {{source_language}} to {{target_language}}. Provide only the translated text, without any additional comments, explanations, or quotation marks. The text to translate is: {{text_to_process}}",
-            default_model: 'gemini-1.5-flash',
+            default_model: 'gpt-4o',
            allowed_models: [
                 'gpt-4o',
                 'gpt-4',

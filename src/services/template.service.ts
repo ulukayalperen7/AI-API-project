@@ -16,6 +16,7 @@ interface ExecuteResponse {
 // It requires a 'placeholders' property which is an object with string keys and string values.
 interface ExecuteRequestBody {
     placeholders: Record<string, string>;
+    model?: string; // The '?' makes this property optional.
 }
 
 // This is a utility function to replace placeholders in a text.
@@ -58,7 +59,7 @@ const findTemplateById = async (templateId: string): Promise<Template | null> =>
     // this is extra control layer
     // This check validates that the conversion to a number was successful.
     if (isNaN(idNumber)) {
-      throw new AppError('Failed to parse the numeric ID.', 500); // This should ideally never happen
+        throw new AppError('Failed to parse the numeric ID.', 500); // This should ideally never happen
     }
 
     console.log(`SERVICE: Searching for template with ID: ${idNumber}`);
@@ -86,14 +87,39 @@ const findTemplateById = async (templateId: string): Promise<Template | null> =>
 // It is typed to receive a 'string' and an 'ExecuteRequestBody', and returns a 'Promise<ExecuteResponse>'.
 export const execute = async (templateId: string, requestBody: ExecuteRequestBody): Promise<ExecuteResponse> => {
 
+
+    const { placeholders, model: userSelectedModel } = requestBody;
+
     // find the template in db
     const template = await findTemplateById(templateId);
 
     // if the template doesnt exist
     // This 'if' check also acts as a type guard. After this, TypeScript knows 'template' cannot be null.
     if (!template) {
-         throw new AppError(`Template with ID: ${templateId} not found.`, 404);
+        throw new AppError(`Template with ID: ${templateId} not found.`, 404);
     }
+
+    let modelToUse: string;
+
+
+    if (userSelectedModel) {
+        // user selects a model
+        console.log(`SERVICE: User requested to use model: ${userSelectedModel}`);
+
+        //Check database if this model is allowed for this template
+        const allowedModels = template.allowed_models as string[];
+
+        if (!allowedModels.includes(userSelectedModel)) {
+            throw new AppError(`Model '${userSelectedModel}' is not allowed for this template.`, 400);
+        }
+
+        modelToUse = userSelectedModel;
+    }else{
+        // if user doesnt choose any model, use the default model
+        console.log(`SERVICE: No model specified by user, using template default: ${template.default_model}`);
+        modelToUse = template.default_model;
+    }
+    
     console.log('SERVICE: Template found: ', template.name);
 
     // create the final prompt by replacing placeholders
@@ -102,16 +128,10 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
 
     console.log('SERVICE: Final prompt prepared.');
 
-    // This service(template.service.ts) no longer knows or cares about "Gemini".
-    const modelToUse = template.default_model;
+    console.log(`SERVICE: Handing off to AI Manager with final model: ${modelToUse}`);
 
-    console.log(`SERVICE: Handing off to AI Manager with model: ${modelToUse}`);
-
-
-    const responseOfAI = await generateContentByModel(modelToUse, finalPrompt)
+    const responseOfAI = await generateContentByModel(modelToUse, finalPrompt);
     console.log('SERVICE: Received response back from AI Manager.');
-
-    // we will later log the request tp apilogs table
 
     console.log('SERVICE IS ABOUT TO RETURN: ', {
         ai_response: responseOfAI,

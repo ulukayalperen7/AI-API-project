@@ -1,5 +1,7 @@
+import { AI_PROVIDERS, SUPPORTED_MODELS } from "../config/ai-models.config";
 import AppError from "../utils/AppError";
-import geminiService from "./gemini.service";
+import GeminiService from "./gemini.service";
+import OpenAIService from "./openai.service"
 /**
  * This interface defines the contract that all AI provider services must follow.
  * Like a blueprint for what an AI provider is in our system.
@@ -16,27 +18,34 @@ export interface AIProvider {
     generateContent(promt: string, modelName: string): Promise<string>;
 }
 
-/**
- * This is our list of available specialists.
- * The key is the model name, and the value is the service object that does the work.
- * The 'Record<string, AIProvider>' type ensures all values follow the AIProvider rules.
- */
-const providers: Record<string, AIProvider> = {
-    'gemini-1.5-flash': geminiService,
-    //'gpt-4': OpenAIService 
-}
+const providerInstances: Record<string, AIProvider> = {
+    [AI_PROVIDERS.GOOGLE]: GeminiService,
+    [AI_PROVIDERS.OPENAI]: OpenAIService,
+    // [AI_PROVIDERS.ANTHROPIC]: AnthropicService,
+};
 
 export const generateContentByModel = async (modelName: string, prompt: string): Promise<string> => {
 
-    // Look at the model list in our providers list 
-    const provider = providers[modelName];
+    // We check if the incoming model name is supported
+    const modelInfo = SUPPORTED_MODELS[modelName as keyof typeof SUPPORTED_MODELS];
 
-    if (!provider) {
-       throw new AppError(`No provider found for model family: '${modelName}'. Check ai.manager.ts configuration.`, 400);
+    if (!modelInfo) {
+        throw new AppError(`Model '${modelName}' is not supported by the system.`, 400);
     }
 
-    console.log(`AI MANAGER: Routing prompt to provider for model: ${modelName}`);
+    // which brand to use google? openai? etc...
+    const providerName = modelInfo.provider;
 
-    // 3. If found, call its 'generateContent' method.
-    return provider.generateContent(prompt, modelName);
+    // find the exact model from the list above 
+    const providerInstance = providerInstances[providerName];
+
+    if (!providerInstance) {
+        throw new AppError(`No service provider configured for '${providerName}'.`, 500);
+    }
+
+    console.log(`AI MANAGER: Routing to '${providerName}' provider for model: ${modelName}`);
+
+
+    //If found, call its 'generateContent' method.
+    return  providerInstance.generateContent(prompt, modelName);
 };
