@@ -30,9 +30,19 @@ async function main(): Promise<void> {
             name: 'Standard Text Summarization',
             description: 'Summarizes a given block of text into a concise paragraph.',
             system_prompt: 'You are a professional editor. \n Analyze the following text and provide a concise summary in {{language}}. The summary should capture the main points and be easy to understand. Do not add any extra commentary. The text to summarize is: {{text_to_process}}',
-            default_model: 'gemini-1.5-flash',
+            default_model: 'gemini-1.5-flash',// if user doesnt choose any model
             // Prisma expects Json fields to be valid JSON, arrays are valid.
-            allowed_models: ['gemini-1.5-pro-latest', 'gemini-1.0-pro', 'gemini-pro', 'gemini-1.5-flash'],
+            allowed_models: [
+                'gpt-4o',
+                'gpt-4',
+                'gpt-4-32k',
+                'gpt-3.5-turbo',
+                'gpt-3.5-turbo-16k',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-1.0-pro-vision'
+            ],
             placeholders: ['text_to_process', 'language'],
         },
     });
@@ -45,7 +55,17 @@ async function main(): Promise<void> {
             description: 'Extracts key topics and terms from a block of text.',
             system_prompt: "You are a text analysis expert. Analyze the following text and extract the most relevant and important keywords. List them as a comma-separated list. For example: 'AI, machine learning, data science'. The text to analyze is: {{text_to_process}}",
             default_model: 'gemini-1.5-flash',
-            allowed_models: ['gemini-1.5-pro-latest', 'gemini-1.0-pro', 'gemini-pro', 'gemini-1.5-flash'],
+            allowed_models: [
+                'gpt-4o',
+                'gpt-4',
+                'gpt-4-32k',
+                'gpt-3.5-turbo',
+                'gpt-3.5-turbo-16k',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-1.0-pro-vision'
+            ],
             placeholders: ['text_to_process'],
         },
     });
@@ -58,7 +78,17 @@ async function main(): Promise<void> {
             description: 'Translates text from a source language to a target language.',
             system_prompt: "You are an expert multilingual translator. Your task is to translate the following text accurately from {{source_language}} to {{target_language}}. Provide only the translated text, without any additional comments, explanations, or quotation marks. The text to translate is: {{text_to_process}}",
             default_model: 'gemini-1.5-flash',
-            allowed_models: ['gemini-1.5-flash'],
+           allowed_models: [
+                'gpt-4o',
+                'gpt-4',
+                'gpt-4-32k',
+                'gpt-3.5-turbo',
+                'gpt-3.5-turbo-16k',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-1.0-pro-vision'
+            ],
             // this tempalte needs these fields to accurately translate the text
             placeholders: ['text_to_process', 'source_language', 'target_language'],
         },
@@ -86,7 +116,17 @@ async function main(): Promise<void> {
             description: 'Drafts a professional email reply based on an original email and a desired intent.',
             system_prompt: "You are a highly efficient and professional business email assistant. Your task is to draft a reply to the email provided below. The reply must be based on the user's stated intent. Write the email in a natural and polite tone, appropriate for a business context, and make sure to draft it in {{language}}. Do not add any extra commentary or signatures, just provide the body of the reply email. --- ORIGINAL EMAIL TO REPLY TO: --- {{original_email}} --- USER'S INTENT FOR THE REPLY: --- {{response_intent}}",
             default_model: 'gemini-1.5-flash',
-            allowed_models: ['gemini-1.5-flash'],
+           allowed_models: [
+                'gpt-4o',
+                'gpt-4',
+                'gpt-4-32k',
+                'gpt-3.5-turbo',
+                'gpt-3.5-turbo-16k',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-1.0-pro-vision'
+            ],
             placeholders: ['original_email', 'response_intent', 'language'],
         },
     });
@@ -112,7 +152,17 @@ async function main(): Promise<void> {
             description: 'Rewrites a given text to a specified style or tone (e.g., more professional, more casual).',
             system_prompt: "You are a skilled editor and writing assistant. Your task is to rewrite the following text according to the specified target style. Ensure the core message of the text remains the same, but adapt the tone, clarity, and phrasing to match the requested style. Provide only the rewritten text. --- ORIGINAL TEXT: --- {{text_to_process}} --- TARGET STYLE: --- {{target_style}}",
             default_model: 'gemini-1.5-flash',
-            allowed_models: ['gemini-1.5-flash'],
+           allowed_models: [
+                'gpt-4o',
+                'gpt-4',
+                'gpt-4-32k',
+                'gpt-3.5-turbo',
+                'gpt-3.5-turbo-16k',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-1.0-pro-vision'
+            ],
             placeholders: ['text_to_process', 'target_style'],
         },
     });
