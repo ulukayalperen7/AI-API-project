@@ -64,7 +64,21 @@ async function main(): Promise<void> {
         },
     });
 
+
     // email template 
+    /**
+         * --- FUTURE UI OPTIONS FOR: Email Reply Assistant ---
+         * In a future web application, the user wouldn't type the 'response_intent'.
+         * Instead, they would click on predefined buttons or select from a dropdown menu.
+         * These options would then send the corresponding 'response_intent' text to the API.
+         *
+         * Example UI Options:
+         * - [ Accept & Ask for Details ] -> "Accept the proposal and ask for more details about the timeline."
+         * - [ Decline Politely ] -> "Politely decline the offer, stating that it's not a good fit at the moment."
+         * - [ Suggest a Meeting ] -> "Suggest a 30-minute video call to discuss this further and ask for their availability."
+         * - [ Express Interest ] -> "Express strong interest and say that you will get back to them within 24 hours."
+         * - [ Request Clarification ] -> "Ask for clarification on specific points mentioned in the email."
+         */
     // id 4
     const emailAssistantTemplate = await prisma.template.create({
         data: {
@@ -77,6 +91,20 @@ async function main(): Promise<void> {
         },
     });
 
+
+    /**
+    * --- FUTURE UI OPTIONS FOR: Text Refiner ---
+    * The 'target_style' for this template is incredibly flexible.
+    * In a user interface, we can provide a set of powerful one-click refinement options.
+    *
+    * Example UI Options:
+    * - [ Make it Professional ] -> "Rewrite this text in a formal, professional, and corporate tone."
+    * - [ Make it Casual ] -> "Rewrite this text in a more casual, friendly, and approachable tone."
+    * - [ Simplify Language ] -> "Simplify this text so that a 10th grader can easily understand it. Remove all jargon."
+    * - [ Make it More Assertive ] -> "Make the language more confident and assertive, using active voice."
+    * - [ Shorten (Tweet-style) ] -> "Condense this text into a short, impactful version under 280 characters, suitable for Twitter."
+    * - [ Expand (Elaborate) ] -> "Expand on this point, adding more detail and providing examples to make it a full paragraph."
+    */
     // id 5
     const textRefinementTemplate = await prisma.template.create({
         data: {

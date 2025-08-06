@@ -44,6 +44,7 @@ class GeminiService implements AIProvider {
         try {
             console.log("GEMINI SERVICE: Sending prompt via class method...");
             // The 'await' keyword pauses execution until the 'generateContent' promise settles.
+            //                this generateContent method is from googleAI object, not our method 
             const result = await this.model.generateContent(promt);
             // we get the response from the result that is created in generateContent method
             const response = await result.response;

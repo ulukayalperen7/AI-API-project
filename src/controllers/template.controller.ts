@@ -1,7 +1,6 @@
 // Imports the necessary types from the Express framework for type safety.
 import { NextFunction, Request, Response } from 'express';
 
-// The '.js' extension is removed as TypeScript handles module resolution.
 import * as TemplateService from '../services/template.service';
 
 /**
@@ -47,7 +46,7 @@ export const executeTemplate = async (req: Request, res: Response, next: NextFun
         });
 
     } catch (error) {
-        next(error);
+        next(error); // to globalErrorHandler 
         /* // This block catches any errors that occur in the 'try' block.
         // It checks if the caught 'error' is an instance of the standard Error class to safely access its properties.
         if (error instanceof Error) {
