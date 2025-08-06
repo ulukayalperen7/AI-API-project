@@ -10,9 +10,10 @@ export interface AIProvider {
      * It takes a text prompt and returns the AI-generated content
      * Each AI service(gemini,openai) must have this exact method.
      * @param promt  the final text prompt to be sent to the AI
+     * @param modelName specific model name
      * @returns a promise that resolves to the string response from the AI
      */
-    generateContent(promt: string): Promise<string>;
+    generateContent(promt: string, modelName: string): Promise<string>;
 }
 
 /**
@@ -22,7 +23,7 @@ export interface AIProvider {
  */
 const providers: Record<string, AIProvider> = {
     'gemini-1.5-flash': geminiService,
-    //'gpt-4': OpenAIService ... future expansion example
+    //'gpt-4': OpenAIService 
 }
 
 export const generateContentByModel = async (modelName: string, prompt: string): Promise<string> => {
@@ -31,11 +32,11 @@ export const generateContentByModel = async (modelName: string, prompt: string):
     const provider = providers[modelName];
 
     if (!provider) {
-       throw new AppError(`Model '${modelName}' is not supported or not registered.`, 400);
+       throw new AppError(`No provider found for model family: '${modelName}'. Check ai.manager.ts configuration.`, 400);
     }
 
     console.log(`AI MANAGER: Routing prompt to provider for model: ${modelName}`);
 
     // 3. If found, call its 'generateContent' method.
-    return provider.generateContent(prompt);
+    return provider.generateContent(prompt, modelName);
 };
