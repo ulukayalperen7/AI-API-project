@@ -4,6 +4,7 @@ import { Template } from '@prisma/client';
 import prisma from '../config/prismaClient';
 import { generateContentByModel } from './ai.manager';
 import AppError from '../utils/AppError';
+import { sanitizePlaceholders } from '../security/prompt.sanitizer';
 
 // This interface defines the expected structure of the object returned by the 'execute' function.
 // It ensures that any function calling 'execute' knows to expect these specific properties.
@@ -99,6 +100,12 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
         throw new AppError(`Template with ID: ${templateId} not found.`, 404);
     }
 
+    console.log('SERVICE: Template found: ', template.name);
+
+    /*   If sanitizePlaceholders finds a forbidden phrase, it will throw an AppError,
+     and the execution of this function will stop immediately. */
+    sanitizePlaceholders(placeholders);
+
     let modelToUse: string;
 
 
@@ -114,13 +121,12 @@ export const execute = async (templateId: string, requestBody: ExecuteRequestBod
         }
 
         modelToUse = userSelectedModel;
-    }else{
+    } else {
         // if user doesnt choose any model, use the default model
         console.log(`SERVICE: No model specified by user, using template default: ${template.default_model}`);
         modelToUse = template.default_model;
     }
-    
-    console.log('SERVICE: Template found: ', template.name);
+
 
     // create the final prompt by replacing placeholders
     // The 'template.system_prompt' and 'requestBody.placeholders' properties are accessed safely.
