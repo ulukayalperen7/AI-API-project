@@ -1,112 +1,124 @@
-# Project Manifesto: AI Content Lab
+# AI Content Lab - An Intelligent & Scalable AI API Project
 
-This document defines the strategic purpose, technical approach, feature set, and development roadmap for the "AI Content Lab" project. It serves as a central reference point for everyone involved in the project.
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 
-## 1. Strategic Purpose of the Project (The "WHY")
+This project is an **"AI Capability Factory"**, designed to transform powerful, raw AI models like Google's Gemini and OpenAI's GPT into a manageable, scalable, and flexible professional backend service.
 
-While powerful AI tools like ChatGPT exist, the purpose of developing our own API is not to reinvent artificial intelligence. Our goal is to transform a raw and powerful AI engine into a **professional service** that is manageable, reliable, and operates according to specific business rules.
+The core strength of this project lies in its ability to introduce new AI capabilities to the system **without changing the application code**, simply by adding a new **template** to the database. This provides incredible development speed and architectural flexibility.
 
-Our reasons for developing this project are:
+---
 
-*   **Abstracting Expertise:** To enable users to get the best results with simple commands like "summarize this text" without needing to know expert "prompt engineering." The expertise will be embedded within our back-end code.
-*   **Standardizing Output:** To guarantee that other applications can seamlessly use the data by always processing the variable and sometimes messy responses from the AI into a predictable, clean, and structured **JSON format**.
-*   **Security and Centralization:** To eliminate security risks and uncontrolled spending by managing valuable and costly API keys in a single, secure location (our back-end).
-*   **Cost and Performance Control:** To create a basis for usage analysis and cost optimization by logging all requests made to the AI services.
+## 🚀 Strategic Purpose of the Project (The "Why")
 
-In summary, we are not offering the user a raw engine, but a reliable, key-in-hand tool designed with that engine to perform specific tasks perfectly.
+The goal is not to reinvent artificial intelligence but to build a professional service that wraps raw AI engines with specific business rules, security, and reliability.
 
-## 2. Platform Vision and Core Capabilities
+-   **Abstracting Expertise:** Enables users to achieve optimal results with simple commands, eliminating the need for expert "prompt engineering." The expertise is embedded within our backend logic.
+-   **Standardizing Output:** Guarantees that the variable and sometimes unstructured responses from the AI are always processed into a predictable, clean, and structured JSON format, making it easy for other applications to consume.
+-   **Security & Centralization:** Manages valuable and costly API keys in a single, secure backend location, eliminating security risks and uncontrolled spending.
+-   **Flexibility & Scalability:** Avoids vendor lock-in by allowing the integration of any AI provider (Gemini, OpenAI, etc.) without altering the core business logic of the application.
 
-The platform is built on logical modules that allow users to perform different analyses based on their needs.
+---
 
-### Module 1: Text Lab 📝 **(Primary Focus)**
-The entire focus of the project in this phase will be on this module. The goal is to build a powerful and flexible text-processing engine.
+## 🏛️ Architecture and Technical Approach
 
-*   **Text Generation:**
-    *   **In-depth Summarization:** Summarizes the given text at various levels of length and detail.
-    *   **Creative Headline Generation:** Suggests catchy headlines and slogans appropriate to the content and tone of the text.
-*   **Text Analysis:**
-    *   **Conceptual Keyword Extraction:** Identifies the abstract themes and concepts underlying the text, rather than just simple words.
-    *   **Multi-layered Sentiment Analysis:** Detects not only the positive/negative tone of the text but also specific emotions like `[Excitement, Trust, Curiosity, Anxiety]`.
-*   **Text Transformation:**
-    *   **Text Improvement:** Rewrites the text to make it more fluent, professional, or suitable for a specific target audience.
+The project is built on a layered architecture that adheres to the **Separation of Concerns** principle. The lifecycle of a request follows the **Router -> Validator -> Controller -> Service** flow.
 
-### Module 2: Visual Lab 🖼️ **(Secondary Priority / Future Vision)**
-These are features that can be added after the Text Lab is complete.
+### Key Concepts
 
-*   Intelligent Scene and Object Recognition
-*   Automatic Text Caption Generation from Images
-*   Text Recognition from Images (OCR)
+-   **Dynamic Template Engine:** Core tasks like "text summarization" or "translation" are not hard-coded. They are managed as dynamic templates stored in a `Template` table in the database. Each template contains a `system_prompt`, a `default_model`, and a list of `allowed_models`.
+-   **Abstracted AI Providers (Strategy Pattern):** Different AI services (`GeminiService`, `OpenAIService`) are abstracted behind a common `AIProvider` interface. A central `AIManager` service acts as a factory, dynamically selecting the correct provider based on the requested model name (e.g., any model starting with 'gpt' is routed to `OpenAIService`). This makes the system incredibly extensible.
+-   **Centralized Error Handling:** All errors thrown within the application are standardized using a custom `AppError` class. Errors from the service layer are propagated up to the controller, which then passes them to a single Global Error Handler middleware using `next(error)`. This ensures consistent and secure error responses.
+-   **Type-Safe Validation:** Incoming request bodies are rigorously validated against strict rules defined in DTO (Data Transfer Object) classes using the `class-validator` library. Invalid requests are rejected at the entry point before they can reach the core business logic.
 
-## 3. Technical Approach and Architecture
+---
 
-### Technology Stack
-*   **Backend:** Node.js
-*   **Web Framework:** Express.js
-*   **AI Service:** OpenAI API (GPT-4 / GPT-3.5-Turbo)
-*   **Required Libraries:** `openai`, `express`, `dotenv`, `cors`
-
-### API Architecture: Task-Oriented and Grouped Structure
-A multi-endpoint REST API structure that logically groups tasks will be adopted to increase the project's manageability and readability. This structure prevents complexity as the project grows and simplifies adding new features. Actions (like `analysis`, `generation`, `transformation`) will be presented in self-consistent groups.
-
-### Key Concept: System Prompt
-A "System Prompt" is a preliminary instruction given to the AI model before assigning it a task, teaching it who it is and how it should behave.
-
-*   **Example:** For a text summarization task, we send the AI a system prompt like, "You are a professional editor who analyzes long texts and extracts the most important points. Your response should only contain the summary text, with no additional explanations."
-*   **Benefit:** This ensures the AI produces consistent, reliable, and properly formatted outputs. This approach forms the foundation of our project's professionalism.
-
-## 4. Development Process and Phased Roadmap
-
-The project will be developed using a **"back-end-first"** approach. All API logic and features will be tested and validated with tools like Postman before being connected to a user interface.
-
-### Phase 1: Foundation Setup and Infrastructure
-This phase lays the groundwork for the project and creates the first working version.
-
-*   [ ] Set up a Git repository and a Node.js/Express project skeleton.
-*   [ ] Create the folder structure according to the architecture (`src`, `api`, `config`, etc.).
-*   [ ] Configure the API key and environment variables using a `.env` file.
-*   [ ] Create the basic structure for the first endpoint (text summarization task).
-*   [ ] Write the basic service function to communicate with the OpenAI service.
-*   [ ] Make the first successful text summarization request using Postman.
-
-### Phase 2: First Features (The Text-to-Text Core)
-This phase involves implementing the first usable feature set of the project.
-
-*   [ ] **Feature: Text Summarization**
-    *   Add parameter support (`length`) to get short, medium, and long summaries.
-*   [ ] **Feature: Keyword Extraction**
-    *   Complete the relevant endpoint and service logic.
-*   [ ] **Feature: Sentiment Analysis**
-    *   Complete the relevant endpoint and service logic.
-
-### Phase 3: Expanding Capabilities and Refinement
-Adding new capabilities on top of the core features and strengthening the existing system.
-
-*   [ ] **Feature: Creative Headline Generation**
-*   [ ] **Feature: Text Rewriting**
-*   [ ] Implement a centralized error-handling mechanism.
-*   [ ] Add a basic validation layer for incoming requests.
-
-## 5. Project Management and Tracking
-Project tasks and progress will be transparently tracked using **Trello**.
-
-*   **Board:** `AI API Project`
-*   **Lists (Columns):** `Backlog` (All Ideas), `To-Do`, `In Progress`, `Done`.
-*   **Cards:** Each `[ ]` item in the roadmap will be created as a card in Trello with detailed descriptions and sub-tasks (checklists). This will both structure the development process and allow mentors to easily track project progress.
-
-## 6. Technology Stack and Core Tools
+## 🛠️ Technology Stack & Tools
 
 ### Backend Technologies
-*   **Platform:** Node.js
-*   **Web Framework:** Express.js
-*   **Database:** Not Required for Initial Stage (Stateless)
+-   **Platform:** [Node.js](https://nodejs.org/)
+-   **Language:** [TypeScript](https://www.typescriptlang.org/)
+-   **Web Framework:** [Express.js](https://expressjs.com/)
+-   **Database ORM:** [Prisma](https://www.prisma.io/)
+-   **Database:** [PostgreSQL](https://www.postgresql.org/)
+-   **Validation:** [class-validator](https://github.com/typestack/class-validator)
 
-### AI Services
-*   **Primary Service Provider:** OpenAI
-*   **Models to be Used:** GPT-4 / GPT-3.5-Turbo
+### AI Services Integrated
+-   **Google Gemini:** `gemini-1.5-flash`, `gemini-1.5-pro`, etc.
+-   **OpenAI:** `gpt-4o`, `gpt-4`, `gpt-3.5-turbo`, etc.
 
-### Development and Management Tools
-*   **Package Manager:** NPM
-*   **API Testing Tool:** Postman
-*   **Version Control System:** Git
-*   **Project Management Platform:** Trello
+### Development & Management Tools
+-   **Package Manager:** NPM
+-   **API Testing Tool:** [Postman](https://www.postman.com/)
+-   **Version Control:** Git
+-   **Project Management:** Trello
+
+---
+
+## ⚙️ Setting Up and Running the Project Locally
+
+### Prerequisites
+-   Node.js (v18+ recommended)
+-   A running PostgreSQL database instance
+
+### Installation Steps
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+
+2.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Set Up Environment Variables:**
+    -   Create a `.env` file in the project's root directory.
+    -   Copy the contents of `.env.example` and fill in your own credentials:
+    ```env
+    # --- Database Configuration ---
+    DATABASE_URL="postgresql://USERNAME:PASSWORD@localhost:5432/DATABASE_NAME?schema=public"
+    
+    # --- Server Configuration ---
+    PORT=3000
+    
+    # --- API Keys ---
+    GEMINI_API_KEY="..."
+    OPENAI_API_KEY="..."
+    ```
+
+4.  **Set Up and Seed the Database:**
+    -   This command creates the database schema based on `prisma/schema.prisma` and runs the `prisma/seed.ts` script to populate the `Template` table with initial capabilities.
+    ```bash
+    npx prisma migrate dev
+    ```
+
+5.  **Start the Development Server:**
+    -   The server will start on `http://localhost:3000`.
+    ```bash
+    npm run dev
+    ```
+---
+
+## 📖 API Usage
+
+All capabilities of the project are accessed through a single, intelligent endpoint.
+
+### Primary Endpoint
+
+-   `POST /api/v1/templates/:id/execute`
+
+#### Request Body
+-   **`placeholders` (required):** An object used to fill in the dynamic variables within the template's `system_prompt`.
+-   **`model` (optional):** A string specifying which AI model to use for the task. If omitted, the template's `default_model` from the database will be used. The specified model must be in the template's `allowed_models` list.
+
+#### Example Request (Using OpenAI's GPT-4o for a summarization task)
+```json
+{
+  "placeholders": {
+    "text_to_process": "This is a long text that needs to be summarized by the AI.",
+    "language": "English"
+  },
+  "model": "gpt-4o"
+}
